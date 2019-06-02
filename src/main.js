@@ -16,6 +16,9 @@ import store from './store'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+import elCascaderMulti from 'el-cascader-multi'
+Vue.use(elCascaderMulti)
+
 Vue.use(ElementUI, { locale })
 Vue.use(VCharts)
 

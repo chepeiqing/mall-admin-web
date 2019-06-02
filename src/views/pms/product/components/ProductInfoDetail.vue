@@ -52,6 +52,10 @@
         <el-input v-model="value.weight" style="width: 300px"></el-input>
         <span style="margin-left: 20px">克</span>
       </el-form-item>
+      <el-form-item label="商品体积：">
+        <el-input v-model="value.volume" style="width: 300px"></el-input>
+        <span style="margin-left: 20px">立方厘米</span>
+      </el-form-item>
       <el-form-item label="排序">
         <el-input v-model="value.sort"></el-input>
       </el-form-item>
@@ -159,7 +163,7 @@
       getCateNameById(id){
         let name=null;
         for(let i=0;i<this.productCateOptions.length;i++){
-          for(let j=0;i<this.productCateOptions[i].children.length;j++){
+          for(let j=0;j<this.productCateOptions[i].children.length;j++){
             if(this.productCateOptions[i].children[j].value===id){
               name=this.productCateOptions[i].children[j].label;
               return name;

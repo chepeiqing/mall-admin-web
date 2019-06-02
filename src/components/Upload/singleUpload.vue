@@ -1,7 +1,7 @@
 <template> 
   <div>
     <el-upload
-      action="http://macro-oss.oss-cn-shenzhen.aliyuncs.com"
+      action="https://upload.qbox.me"
       :data="dataObj"
       list-type="picture"
       :multiple="false" :show-file-list="showFileList"
@@ -20,15 +20,37 @@
 </template>
 <script>
   import {policy} from '@/api/oss'
-
+  import { getFilePathName } from '@/utils'
+  var domain = ''
   export default {
     name: 'singleUpload',
     props: {
       value: String
     },
+    data() {
+      return {
+        dataObj: {
+          token: '',
+          key: '',
+          domain: ''
+        },
+        dialogVisible: false
+      };
+    },
+    created() {
+      domain = this.$store.getters.domain
+    },
     computed: {
       imageUrl() {
-        return this.value;
+        if (this.value) {
+          if (this.value.indexOf('http') >= 0) {
+            return this.value
+          } else {
+            return domain + this.value
+          }
+        } else {
+          return this.value
+        }
       },
       imageName() {
         if (this.value != null && this.value !== '') {
@@ -51,19 +73,6 @@
         }
       }
     },
-    data() {
-      return {
-        dataObj: {
-          policy: '',
-          signature: '',
-          key: '',
-          ossaccessKeyId: '',
-          dir: '',
-          host: ''
-        },
-        dialogVisible: false
-      };
-    },
     methods: {
       emitInput(val) {
         this.$emit('input', val)
@@ -78,12 +87,9 @@
         let _self = this;
         return new Promise((resolve, reject) => {
           policy().then(response => {
-            _self.dataObj.policy = response.data.policy;
-            _self.dataObj.signature = response.data.signature;
-            _self.dataObj.ossaccessKeyId = response.data.accessKeyId;
-            _self.dataObj.key = response.data.dir + '/${filename}';
-            _self.dataObj.dir = response.data.dir;
-            _self.dataObj.host = response.data.host;
+            _self.dataObj.token = response.data.token;
+            _self.dataObj.key = getFilePathName(file.name)
+            domain = response.data.domain
             resolve(true)
           }).catch(err => {
             console.log(err)
@@ -94,8 +100,8 @@
       handleUploadSuccess(res, file) {
         this.showFileList = true;
         this.fileList.pop();
-        this.fileList.push({name: file.name, url: this.dataObj.host + '/' + this.dataObj.dir + '/' + file.name});
-        this.emitInput(this.fileList[0].url);
+        this.fileList.push({name: file.name, url: res.key});
+        this.emitInput(res.key);
       }
     }
   }

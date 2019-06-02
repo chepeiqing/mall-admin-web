@@ -52,3 +52,40 @@ export function formatTime(time, option) {
     return d.getMonth() + 1 + '月' + d.getDate() + '日' + d.getHours() + '时' + d.getMinutes() + '分'
   }
 }
+
+
+/** ************************************时间格式化处理 yyyy-MM-dd hh:mm:ss ************************************/
+export function dateFmt(fmt, date) { // author: meizz
+  var o = {
+    'M+': date.getMonth() + 1, // 月份
+    'd+': date.getDate(), // 日
+    'h+': date.getHours(), // 小时
+    'm+': date.getMinutes(), // 分
+    's+': date.getSeconds(), // 秒
+    'q+': Math.floor((date.getMonth() + 3) / 3), // 季度
+    'S': date.getMilliseconds() // 毫秒
+  }
+  if (/(y+)/.test(fmt)) { fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length)) }
+  for (var k in o) {
+    if (new RegExp('(' + k + ')').test(fmt)) { fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length))) }
+  }
+  return fmt
+}
+
+// 获取文件后缀
+export function getSuffix(fileName) {
+  var index1 = fileName.lastIndexOf('.')
+  var index2 = fileName.length
+  var type = fileName.substring(index1, index2)
+  return type
+}
+
+export function getFilePathName(fileName) {
+  const suffix = getSuffix(fileName)
+  var date = new Date()
+  return dateFmt('yyyyMMdd', date) + '/' + date.getHours() + '/' + date.getMinutes() + '/' + date.getTime() + suffix
+}
+
+export function isExternal(path) {
+  return /^(https?:|mailto:|tel:)/.test(path)
+}

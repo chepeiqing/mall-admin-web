@@ -33,11 +33,64 @@ export const constantRouterMap = [
     }]
   },
   {
+    path: '/ams',
+    component: Layout,
+    redirect: '/ams/admin',
+    name: 'ams',
+    meta: {title: '系统管理', icon: 'product'},
+    children: [
+      {
+        path: 'admin',
+        name: 'admin',
+        component: () => import('@/views/ams/admin/index'),
+        meta: {title: '用户管理', icon: 'product-list'},
+        children: [
+          {
+            path: 'addAdmin',
+            name: 'addAdmin',
+            component: () => import('@/views/ams/admin/add'),
+            meta: {title: '添加用户', icon: 'product-list', activeMenu: '/ams/admin'},
+            hidden: true
+          },
+          {
+            path: 'updateAdmin',
+            name: 'updateAdmin',
+            component: () => import('@/views/ams/admin/update'),
+            meta: {title: '修改用户', icon: 'product-list', activeMenu: '/ams/admin'},
+            hidden: true
+          },
+        ]
+      },
+      {
+        path: 'role',
+        name: 'role',
+        component: () => import('@/views/ams/role/index'),
+        meta: {title: '角色管理', icon: 'product-list'},
+        children: [
+          {
+            path: 'addRole',
+            name: 'addRole',
+            component: () => import('@/views/ams/role/add'),
+            meta: {title: '添加角色', icon: 'product-list', activeMenu: '/ams/role'},
+            hidden: true
+          },
+          {
+            path: 'updateRole',
+            name: 'updateRole',
+            component: () => import('@/views/ams/role/update'),
+            meta: {title: '修改角色', icon: 'product-list', activeMenu: '/ams/role'},
+            hidden: true
+          },
+        ]
+      },
+    ]
+  },
+  {
     path: '/pms',
     component: Layout,
     redirect: '/pms/product',
     name: 'pms',
-    meta: {title: '商品', icon: 'product'},
+    meta: {title: '商品管理', icon: 'product'},
     children: [{
       path: 'product',
       name: 'product',
@@ -48,10 +101,11 @@ export const constantRouterMap = [
         path: 'addProduct',
         name: 'addProduct',
         component: () => import('@/views/pms/product/add'),
-        meta: {title: '添加商品', icon: 'product-add'}
+        meta: {title: '添加商品', icon: 'product-add'},
+        hidden: true
       },
       {
-        path: 'updateProduct',
+        path: 'product/updateProduct',
         name: 'updateProduct',
         component: () => import('@/views/pms/product/update'),
         meta: {title: '修改商品', icon: 'product-add'},
@@ -137,7 +191,27 @@ export const constantRouterMap = [
         component: () => import('@/views/pms/brand/update'),
         meta: {title: '编辑品牌'},
         hidden: true
-      }
+      },
+      {
+        path: 'logistics',
+        name: 'logistics',
+        component: () => import('@/views/pms/logistics/index'),
+        meta: {title: '物流模板', icon: 'product-add'}
+      },
+      {
+        path: 'addLogistics',
+        name: 'addLogistics',
+        component: () => import('@/views/pms/logistics/add'),
+        meta: {title: '添加物流模板', icon: 'product-add'},
+        hidden: true
+      },
+      {
+        path: 'updateLogistics',
+        name: 'updateLogistics',
+        component: () => import('@/views/pms/logistics/update'),
+        meta: {title: '修改物流模板', icon: 'product-add'},
+        hidden: true
+      },
     ]
   },
   {
@@ -145,7 +219,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/oms/order',
     name: 'oms',
-    meta: {title: '订单', icon: 'order'},
+    meta: {title: '订单管理', icon: 'order'},
     children: [
       {
         path: 'order',
@@ -166,6 +240,12 @@ export const constantRouterMap = [
         component: () => import('@/views/oms/order/deliverOrderList'),
         meta: {title: '发货列表'},
         hidden:true
+      },
+      {
+        path: 'driver',
+        name: 'driver',
+        component: () => import('@/views/oms/driver/index'),
+        meta: {title: '司机列表', icon: 'order-setting'}
       },
       {
         path: 'orderSetting',
@@ -199,7 +279,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/sms/coupon',
     name: 'sms',
-    meta: {title: '营销', icon: 'sms'},
+    meta: {title: '营销管理', icon: 'sms'},
     children: [
       {
         path: 'flash',
@@ -256,31 +336,31 @@ export const constantRouterMap = [
         hidden:true
       },
       {
-        path: 'brand',
+        path: 'sBrand',
         name: 'homeBrand',
         component: () => import('@/views/sms/brand/index'),
         meta: {title: '品牌推荐', icon: 'product-brand'}
       },
       {
-        path: 'new',
+        path: 'sNew',
         name: 'homeNew',
         component: () => import('@/views/sms/new/index'),
         meta: {title: '新品推荐', icon: 'sms-new'}
       },
       {
-        path: 'hot',
+        path: 'sHot',
         name: 'homeHot',
         component: () => import('@/views/sms/hot/index'),
         meta: {title: '人气推荐', icon: 'sms-hot'}
       },
       {
-        path: 'subject',
+        path: 'sSubject',
         name: 'homeSubject',
         component: () => import('@/views/sms/subject/index'),
         meta: {title: '专题推荐', icon: 'sms-subject'}
       },
       {
-        path: 'advertise',
+        path: 'sAdvertise',
         name: 'homeAdvertise',
         component: () => import('@/views/sms/advertise/index'),
         meta: {title: '广告列表', icon: 'sms-ad'}
@@ -298,6 +378,27 @@ export const constantRouterMap = [
         component: () => import('@/views/sms/advertise/update'),
         meta: {title: '编辑广告'},
         hidden:true
+      }
+    ]
+  },
+  {
+    path:'/ums',
+    component: Layout,
+    redirect: '/ums/user',
+    name: 'ums',
+    meta: {title: '客户管理', icon: 'sms'},
+    children: [
+      {
+        path: 'user',
+        name: 'user',
+        component: () => import('@/views/ums/user/index'),
+        meta: {title: '客户管理', icon: 'sms-hot'}
+      },
+      {
+        path: 'vipLevel',
+        name: 'vipLevel',
+        component: () => import('@/views/ums/vipLevel/index'),
+        meta: {title: '会员等级', icon: 'sms-hot'}
       }
     ]
   },

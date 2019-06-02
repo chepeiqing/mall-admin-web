@@ -21,7 +21,8 @@
 </template>
 <script>
   import {policy} from '@/api/oss'
-
+  import { getFilePathName } from '@/utils'
+  var domain = ''
   export default {
     name: 'multiUpload',
     props: {
@@ -36,12 +37,9 @@
     data() {
       return {
         dataObj: {
-          policy: '',
-          signature: '',
+          token: '',
           key: '',
-          ossaccessKeyId: '',
-          dir: '',
-          host: ''
+          domain: ''
         },
         dialogVisible: false,
         dialogImageUrl:null
@@ -51,7 +49,7 @@
       fileList() {
         let fileList=[];
         for(let i=0;i<this.value.length;i++){
-          fileList.push({url:this.value[i]});
+          fileList.push({url: domain + this.value[i]});
         }
         return fileList;
       }
@@ -75,12 +73,9 @@
         let _self = this;
         return new Promise((resolve, reject) => {
           policy().then(response => {
-            _self.dataObj.policy = response.data.policy;
-            _self.dataObj.signature = response.data.signature;
-            _self.dataObj.ossaccessKeyId = response.data.accessKeyId;
-            _self.dataObj.key = response.data.dir + '/${filename}';
-            _self.dataObj.dir = response.data.dir;
-            _self.dataObj.host = response.data.host;
+            _self.dataObj.token = response.data.token;
+            _self.dataObj.key = getFilePathName(file.name)
+            domain = response.data.domain
             resolve(true)
           }).catch(err => {
             console.log(err)
@@ -89,7 +84,7 @@
         })
       },
       handleUploadSuccess(res, file) {
-        this.fileList.push({url: file.name,url:this.dataObj.host + '/' + this.dataObj.dir + '/' + file.name});
+        this.fileList.push({url: file.name,url:res.key});
         this.emitInput(this.fileList);
       },
       handleExceed(files, fileList) {

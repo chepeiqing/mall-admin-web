@@ -1,4 +1,5 @@
 import { login, logout, getInfo } from '@/api/login'
+import { getPermissionMenu } from '@/api/permission'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const user = {
@@ -6,7 +7,9 @@ const user = {
     token: getToken(),
     name: '',
     avatar: '',
-    roles: []
+    roles: [],
+    menus: [],
+    domain: ''
   },
 
   mutations: {
@@ -21,6 +24,12 @@ const user = {
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
+    },
+    SET_MENU: (state, menus) => {
+      state.menus = menus
+    },
+    SET_DOMAIN: (state, domain) => {
+      state.domain = domain
     }
   },
 
@@ -34,7 +43,26 @@ const user = {
           const tokenStr = data.tokenHead+data.token
           setToken(tokenStr)
           commit('SET_TOKEN', tokenStr)
+          commit('SET_DOMAIN', data.domain)
           resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+
+    // 获取菜单信息
+    GetMenu({ commit, state }) {
+      return new Promise((resolve, reject) => {
+        getPermissionMenu().then(response => {
+          const data = response.data
+          // 验证返回的 system 是否是一个非空数组
+          if (data && data.length > 0) {
+            commit('SET_MENU', data)
+          } else {
+            reject('getMenu: system must be a non-null array !')
+          }
+          resolve(data)
         }).catch(error => {
           reject(error)
         })

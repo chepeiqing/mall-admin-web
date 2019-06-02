@@ -1,10 +1,10 @@
 <template> 
   <el-card class="form-container" shadow="never">
     <el-steps :active="active" finish-status="success" align-center>
-      <el-step title="填写商品信息"></el-step>
-      <el-step title="填写商品促销"></el-step>
-      <el-step title="填写商品属性"></el-step>
-      <el-step title="选择商品关联"></el-step>
+      <el-step title="填写商品信息" @click.native="toStep(0)"></el-step>
+      <el-step title="填写商品促销" @click.native="toStep(1)"></el-step>
+      <el-step title="填写商品属性" @click.native="toStep(2)"></el-step>
+      <el-step title="选择商品关联" @click.native="toStep(3)"></el-step>
     </el-steps>
     <product-info-detail
       v-show="showStatus[0]"
@@ -101,7 +101,8 @@
     unit: '',
     usePointLimit: 0,
     verifyStatus: 0,
-    weight: 0
+    weight: 0,
+    volume: 0
   };
   export default {
     name: 'ProductDetail',
@@ -142,6 +143,13 @@
       nextStep() {
         if (this.active < this.showStatus.length - 1) {
           this.active++;
+          this.hideAll();
+          this.showStatus[this.active] = true;
+        }
+      },
+      toStep(index) {
+        if (this.isEdit) {
+          this.active = parseInt(index);
           this.hideAll();
           this.showStatus[this.active] = true;
         }

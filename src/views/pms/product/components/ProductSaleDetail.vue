@@ -295,6 +295,74 @@
         this.$emit('prevStep')
       },
       handleNext() {
+        if (this.value.promotionType === 1) {
+          // 特惠促销
+          if (!this.value.promotionStartTime) {
+            this.$message({
+              message: '请选择特惠促销开始时间',
+              type: 'error'
+            });
+            return
+          }
+          if (!this.value.promotionEndTime) {
+            this.$message({
+              message: '请选择特惠促销结束时间',
+              type: 'error'
+            });
+            return
+          }
+          if (!this.value.promotionPrice) {
+            this.$message({
+              message: '请输入特惠促销价格',
+              type: 'error'
+            });
+            return
+          }
+        } else if (this.value.promotionType === 2 && this.value.memberPriceList.length > 0) {
+          for (let i = 0; i < this.value.memberPriceList.length; i++) {
+            if (!this.value.memberPriceList[i].memberPrice) {
+              this.$message({
+                message: '请输入' + this.value.memberPriceList[i].memberLevelName + '价格',
+                type: 'error'
+              });
+              return
+            }
+          }
+        } else if (this.value.promotionType === 3) {
+          for (let i = 0; i < this.value.productLadderList.length; i++) {
+            if (!this.value.productLadderList[i].count) {
+              this.$message({
+                message: '请输入数量',
+                type: 'error'
+              });
+              return
+            }
+            if (!this.value.productLadderList[i].discount) {
+              this.$message({
+                message: '请输入折扣',
+                type: 'error'
+              });
+              return
+            }
+          }
+        } else if (this.value.promotionType === 4) {
+          for (let i = 0; i < this.value.productFullReductionList.length; i++) {
+            if (!this.value.productFullReductionList[i].fullPrice) {
+              this.$message({
+                message: '请输入满足价格',
+                type: 'error'
+              });
+              return
+            }
+            if (!this.value.productFullReductionList[i].reducePrice) {
+              this.$message({
+                message: '请输入立减价格',
+                type: 'error'
+              });
+              return
+            }
+          }
+        }
         this.$emit('nextStep')
       }
     }
